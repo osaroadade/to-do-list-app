@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Reminders App</title>git
+        <link rel="stylesheet" href="main.css">
+    </head>
+
+    <body>
+        <div class="body-container">
+            <div class="search-container">
+                <input type="text" name="search" id="sReminders" placeholder="Search" autocomplete="off">
+
+            </div>
+            <div id="empty-state">
+                <p>You have not created any reminders.</p>
+            </div>
+            <div class="reminder-container">
+                <h1>Reminders</h1>
+                <div id="reminder-list">
+                </div>
+            </div>
+            <div class="btn-container">
+                <button id="new-reminder"><img src="assets/add.svg">New Reminder</button>
+            </div>
+        </div>
+
+        <div class="newR-container">
+            <div class="title-area">
+                <div class="cancel">
+                    <button id="cancel-re">Cancel</button>
+                </div>
+                <h4>New Reminder</h4>
+                <div class="add">
+                    <button id="add-reminder" disabled>Add</button>
+                </div>
+            </div>
+            <div class="form-area">
+                <input type="text" name="title" id="reminder-title" placeholder="Reminder Title" autocomplete="none"
+                    aria-autocomplete="none">
+            </div>
+            <div class="btn-container">
+                <button id="new-reminder" disabled>Add Reminder</button>
+            </div>
+        </div>
+        <script src="index.js"></script>
+    </body>
+
+</html>
