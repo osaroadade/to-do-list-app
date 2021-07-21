@@ -15,6 +15,9 @@ body, input, button {
 :focus-visible{
 	outline: none;
 }
+button {
+    transition: all ease-in-out 200ms;
+}
 body{
 	background: #1a1a1a;
 	color: #fff;
@@ -39,6 +42,10 @@ input[type = "text"]:focus-visible{
 }
 .reminder-container{
 	margin-top: 24px;
+}
+#reminder-list{
+    height: 420px;
+    overflow: auto;
 }
 h1{
 	color: #00a6ff;
@@ -91,6 +98,9 @@ button{
 	background: none;
 	color: #0078ff;
 }
+button:hover{
+    color: #0058bd;
+}
 .btn-container button {
 	display: inline-flex;
 	width: inherit;
@@ -132,15 +142,26 @@ button{
 	height: 96vh;
 	top: 104vh;
 }
-.animationforcc{
-	animation: fromZero ease-in-out 750ms forwards;
+.slideup{
+	animation: SlideUp ease-in-out 750ms forwards;
 }
-@keyframes fromZero {
+@keyframes SlideUp {
 	form{
 		transform: translateY(100vh);
 	}
 	to{
 		transform: translateY(-100vh);
+	}
+}
+.slidedown{
+	animation: SlideDown ease-in-out 750ms forwards;
+}
+@keyframes SlideDown {
+	form{
+		transform: translateY(-100vh);
+	}
+	to{
+		transform: translateY(100vh);
 	}
 }
 .title-area{
@@ -157,7 +178,7 @@ button:disabled{
 	background: #474747;
 	color: #aeaeae
 }
-@media (min-width: 421) {
+@media (min-width: 421px) {
 	body{
 		display: none;;
 	}
