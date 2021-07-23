@@ -67,19 +67,26 @@ function renderAll() {
     } else {
         emptyState.classList.toggle("d-block")
     }
-    var saveDoneReminders = JSON.stringify(doneListItem)
     for (let i = 0; i < circle.length; i++) {
         circle[i].addEventListener("click", () => {
             circle[i].classList.toggle("circle-clicked")
             listItem[i].classList.toggle("todo-done")
             if (!listItem[i].classList.contains("todo-done")) {
-                doneListItem.splice(i, 1)
-                localStorage.removeItem("Completed List")
-                console.log(doneListItem)
+                let savedDoneReminders = JSON.parse(localStorage.getItem("Completed List"))
+                // console.log(savedDoneReminders)
+                savedDoneReminders.splice(i, 1)
+                savedDoneReminders = JSON.stringify(savedDoneReminders)
+                if (savedDoneReminders === '[]') {
+                    localStorage.removeItem("Completed List")
+                } else {
+                    localStorage.setItem("Completed List", savedDoneReminders)
+                }
+                // console.log(doneListItem)
             } else {
                 doneListItem.splice(i, 0, todoListItem[i])
+                let saveDoneReminders = JSON.stringify(doneListItem)
                 localStorage.setItem("Completed List", saveDoneReminders)
-                console.log(doneListItem)
+                // console.log(doneListItem)
             }
         })
     }
