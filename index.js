@@ -1,4 +1,5 @@
 let todoListItem = []
+let doneListItem = []
 
 const circle = document.getElementsByClassName("circle")
 const listItem = document.getElementsByClassName("list-item")
@@ -8,11 +9,42 @@ const newReminder = document.getElementsByClassName("cancel-re")
 const newRContainer = document.querySelector(".newR-container")
 const reminderTitle = document.getElementById("reminder-title")
 const addReminder = document.getElementsByClassName("add-reminder")
+const sReminders = document.querySelector("#sReminders")
+const reminderItem = document.getElementsByClassName("reminder-item")
+const titleContianer = document.querySelector(".title-container")
+const searchContainer = document.querySelector(".search-container")
+const cancelSearch = document.querySelector(".cancel-search")
+const reminderChild = localStorage.getItem("Reminders")
+
+// Search
+sReminders.addEventListener("keyup", () => {
+    const sRemindersLC = sReminders.value.toLowerCase()
+    for (let i = 0; i < listItem.length; i++) {
+        let listItemLC = listItem[i].textContent.toLowerCase()
+        if (listItemLC.includes(sRemindersLC)) {
+            reminderItem[i].style.display = "flex"
+        } else {
+            reminderItem[i].style.display = "none"
+        }
+    }
+})
+
+function searchMotion(action) {
+    searchContainer.classList[action]("search-container-grow")
+    cancelSearch.classList[action]("d-block")
+    titleContianer.classList[action]("transform-y")
+}
+
+sReminders.addEventListener("click", () => {
+    searchMotion("add")
+})
+
+cancelSearch.addEventListener("click", () => {
+    searchMotion("remove")
+})
 
 let containerItems = ""
-let reminderChild = localStorage.getItem("Reminders")
 let remindersFLS = JSON.parse(reminderChild)
-// console.log(remindersFLS)
 if (remindersFLS) {
     todoListItem = remindersFLS
     renderAll()
@@ -25,19 +57,30 @@ function renderAll() {
         for (const i in todoListItem) {
             containerItems += `
                 <div class="reminder-item">
-                    <span class="circle"></span>
+                    <div><span class="circle"></span></div>
                     <p class="list-item">${todoListItem[i]}</p>
                 </div>
             `
         }
         reminderList.innerHTML = containerItems
+        containerItems = ""
     } else {
         emptyState.classList.toggle("d-block")
     }
+    var saveDoneReminders = JSON.stringify(doneListItem)
     for (let i = 0; i < circle.length; i++) {
         circle[i].addEventListener("click", () => {
             circle[i].classList.toggle("circle-clicked")
             listItem[i].classList.toggle("todo-done")
+            if (!listItem[i].classList.contains("todo-done")) {
+                doneListItem.splice(i, 1)
+                localStorage.removeItem("Completed List")
+                console.log(doneListItem)
+            } else {
+                doneListItem.splice(i, 0, todoListItem[i])
+                localStorage.setItem("Completed List", saveDoneReminders)
+                console.log(doneListItem)
+            }
         })
     }
 }
@@ -45,8 +88,6 @@ function renderAll() {
 if (!reminderChild) {
     renderAll()
 }
-
-// renderAll()
 
 //Work on this part from
 for (let i = 0; i < newReminder.length; i++) {

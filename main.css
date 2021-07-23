@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap'); */
 * {
   margin: 0;
   padding: 0;
@@ -25,6 +25,7 @@ body{
 }
 .body-container {
 	margin: 24px;
+    transition: all ease-in-out 200ms;
 }
 input[type = "text"]{
     width: 100%;
@@ -41,20 +42,25 @@ input[type = "text"]:focus-visible{
 	background-color: #3c3c3c;
 }
 .reminder-container{
-	margin-top: 24px;
+	margin-top: 20px;
 }
 #reminder-list{
-    height: 420px;
+    height: 365px;
     overflow: auto;
+    /* padding-bottom: 32px; */
 }
 h1{
 	color: #00a6ff;
+    margin-bottom: 12px;
 }
 .reminder-item{
     display: flex;
-    align-items: center;
     padding: 12px 0;
     gap: 10px;
+}
+.reminder-item > div {
+    height: 22px;
+    width: 22px;
 }
 .todo-done{
     color: rgb(189, 189, 189);
@@ -62,12 +68,13 @@ h1{
 }
 .circle {
     display: inline-block;
-    height: 20px;
-    width: 20px;
+    height: 22px;
+    width: 22px;
     border-radius: 50%;
     border: 2px solid rgb(135, 135, 135);
     position: relative;
 	cursor: pointer;
+    transition: all ease-in-out 50ms;
 }
 .circle-clicked {
     border-color: #00a6ff;
@@ -131,7 +138,6 @@ button:hover{
 	color: #bdbdbd;
 	text-align: center;
 }
-
 .newR-container {
 	background: #282828;
 	padding: 24px;
@@ -182,4 +188,26 @@ button:disabled{
 	body{
 		display: none;;
 	}
+}
+.title-container{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+.search-container{
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    transition: all ease-in 200ms;
+}
+.search-container-grow{
+    margin: -62px -24px 0px !important;
+    padding: 16px;
+    background: #232323;
+}
+.cancel-search {
+    display: none;
+}
+.transform-y{
+    transform: translateY(-50px);
 }
