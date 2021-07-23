@@ -133,6 +133,9 @@ button:hover{
 .d-block{
 	display: block!important;
 }
+.d-none{
+    display: none!important;
+}
 #empty-state p{
 	font-size: 14px;
 	color: #bdbdbd;

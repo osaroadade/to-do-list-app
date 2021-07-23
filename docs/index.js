@@ -16,6 +16,8 @@ const searchContainer = document.querySelector(".search-container")
 const cancelSearch = document.querySelector(".cancel-search")
 const reminderChild = localStorage.getItem("Reminders")
 const reminderDone = localStorage.getItem("Completed List")
+const showCompleted = document.querySelector(".completed-btn")
+const showAll = document.querySelector(".show-all")
 
 // Search
 sReminders.addEventListener("keyup", () => {
@@ -100,6 +102,23 @@ for (let i = 0; i < listItem.length; i++) {
         listItem[i].classList.add("todo-done")
         doneListItem = remindersDoneFLS
     }
+    function actionWithClass(action1, action2) {
+        showCompleted.classList[action1]("d-none")
+        showAll.classList[action2]("d-none")
+    }
+    showCompleted.addEventListener("click", () => {
+        actionWithClass("add", "remove")
+        if (!listItem[i].classList.contains("todo-done")) {
+            reminderItem[i].classList.add("d-none")
+
+        }
+    })
+    showAll.addEventListener("click", () => {
+        actionWithClass("remove", "add")
+        if (reminderItem[i].classList.contains("d-none")) {
+            reminderItem[i].classList.remove("d-none")
+        }
+    })
 }
 
 if (!reminderChild) {
