@@ -15,6 +15,7 @@ const titleContianer = document.querySelector(".title-container")
 const searchContainer = document.querySelector(".search-container")
 const cancelSearch = document.querySelector(".cancel-search")
 const reminderChild = localStorage.getItem("Reminders")
+const reminderDone = localStorage.getItem("Completed List")
 
 // Search
 sReminders.addEventListener("keyup", () => {
@@ -44,13 +45,7 @@ cancelSearch.addEventListener("click", () => {
 })
 
 let containerItems = ""
-let remindersFLS = JSON.parse(reminderChild)
-if (remindersFLS) {
-    todoListItem = remindersFLS
-    renderAll()
-    setState()
-    emptyState.classList.remove("d-block")
-}
+let remindersDoneFLS = JSON.parse(reminderDone)
 
 function renderAll() {
     if (todoListItem.length > 0) {
@@ -72,14 +67,13 @@ function renderAll() {
             circle[i].classList.toggle("circle-clicked")
             listItem[i].classList.toggle("todo-done")
             if (!listItem[i].classList.contains("todo-done")) {
-                let savedDoneReminders = JSON.parse(localStorage.getItem("Completed List"))
                 // console.log(savedDoneReminders)
-                savedDoneReminders.splice(i, 1)
-                savedDoneReminders = JSON.stringify(savedDoneReminders)
-                if (savedDoneReminders === '[]') {
+                remindersDoneFLS.splice(i, 1)
+                remindersDoneFLS = JSON.stringify(remindersDoneFLS)
+                if (remindersDoneFLS === '[]') {
                     localStorage.removeItem("Completed List")
                 } else {
-                    localStorage.setItem("Completed List", savedDoneReminders)
+                    localStorage.setItem("Completed List", remindersDoneFLS)
                 }
                 // console.log(doneListItem)
             } else {
@@ -89,6 +83,22 @@ function renderAll() {
                 // console.log(doneListItem)
             }
         })
+    }
+}
+
+let remindersFLS = JSON.parse(reminderChild)
+if (remindersFLS) {
+    todoListItem = remindersFLS
+    renderAll()
+    setState()
+    emptyState.classList.remove("d-block")
+}
+
+for (let i = 0; i < listItem.length; i++) {
+    if (remindersDoneFLS && listItem[i].textContent === remindersDoneFLS[i]) {
+        circle[i].classList.add("circle-clicked")
+        listItem[i].classList.add("todo-done")
+        doneListItem = remindersDoneFLS
     }
 }
 
