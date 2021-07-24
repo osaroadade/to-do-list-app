@@ -129,11 +129,11 @@ if (!reminderChild) {
 for (let i = 0; i < newReminder.length; i++) {
     if (newReminder[i].className.includes("here")) {
         newReminder[i].addEventListener("click", () => {
-            newRContainer.classList.add("slideup")
+            newRContainer.classList.add("slideup", "d-block")
         })
     } else {
         newReminder[i].addEventListener("click", () => {
-            newRContainer.classList.remove("slideup")
+            newRContainer.classList.remove("slideup", "d-block")
         })
     }
 }
