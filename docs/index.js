@@ -1,6 +1,3 @@
-let todoListItem = []
-let doneListItem = []
-
 const circle = document.getElementsByClassName("circle")
 const listItem = document.getElementsByClassName("list-item")
 const reminderList = document.getElementById("reminder-list")
@@ -14,16 +11,85 @@ const reminderItem = document.getElementsByClassName("reminder-item")
 const titleContianer = document.querySelector(".title-container")
 const searchContainer = document.querySelector(".search-container")
 const cancelSearch = document.querySelector(".cancel-search")
-const reminderChild = localStorage.getItem("Reminders")
-const reminderDone = localStorage.getItem("Completed List")
+const savedLists = localStorage.getItem("tasks")
 const showCompleted = document.querySelector(".completed-btn")
 const showAll = document.querySelector(".show-all")
+
+let taskItems = []
+let parsedSavedLists = JSON.parse(savedLists)
+
+let containerItems = ""
+function renderAll() {
+    if (taskItems.length > 0) {
+        for (let i = 0; i < taskItems.length; i++) {
+            containerItems += `
+                <div class="reminder-item">
+                    <div><span class="circle"></span></div>
+                    <p class="list-item">${taskItems[i].name}</p>
+                </div>
+            `
+        }
+        reminderList.innerHTML = containerItems
+        containerItems = ""
+    } else {
+        emptyState.classList.toggle("d-block")
+    }
+    itemAction()
+    if (parsedSavedLists) {
+        getStatusTypeFLS()
+    }
+}
+
+//Render from local storage
+function RenderFromLS() {
+    let stringItems = JSON.stringify(taskItems)
+    localStorage.setItem("tasks", stringItems)
+}
+
+
+if (parsedSavedLists) {
+    taskItems = parsedSavedLists
+    renderAll()
+    getStatusTypeFLS()
+    setState()
+    emptyState.classList.remove("d-block")
+} else {
+    renderAll()
+}
+
+function itemAction() {
+    for (let i = 0; i < circle.length; i++) {
+        function changeStatusType(action, toggleStatusType) {
+            parsedSavedLists[i].statusType = toggleStatusType
+            circle[i].classList[action]("circle-clicked")
+            listItem[i].classList[action]("todo-done")
+        }
+        circle[i].addEventListener("click", () => {
+            if (parsedSavedLists[i].statusType === "unchecked") {
+                changeStatusType("add", "checked")
+            } else {
+                changeStatusType("remove", "unchecked")
+            }
+            RenderFromLS()
+        })
+    }
+}
+
+//Get Status Type from Local Storage
+function getStatusTypeFLS() {
+    for (let i = 0; i < circle.length; i++) {
+        if (parsedSavedLists[i].statusType === "checked") {
+            circle[i].classList.add("circle-clicked")
+            listItem[i].classList.add("todo-done")
+        }
+    }
+}
 
 // Search
 sReminders.addEventListener("keyup", () => {
     const sRemindersLC = sReminders.value.toLowerCase()
-    for (let i = 0; i < listItem.length; i++) {
-        let listItemLC = listItem[i].textContent.toLowerCase()
+    for (let i = 0; i < taskItems.length; i++) {
+        let listItemLC = taskItems[i].name.toLowerCase()
         if (listItemLC.includes(sRemindersLC)) {
             reminderItem[i].style.display = "flex"
         } else {
@@ -45,85 +111,6 @@ sReminders.addEventListener("click", () => {
 cancelSearch.addEventListener("click", () => {
     searchMotion("remove")
 })
-
-let containerItems = ""
-let remindersDoneFLS = JSON.parse(reminderDone)
-
-function renderAll() {
-    if (todoListItem.length > 0) {
-        for (const i in todoListItem) {
-            containerItems += `
-                <div class="reminder-item">
-                    <div><span class="circle"></span></div>
-                    <p class="list-item">${todoListItem[i]}</p>
-                </div>
-            `
-        }
-        reminderList.innerHTML = containerItems
-        containerItems = ""
-    } else {
-        emptyState.classList.toggle("d-block")
-    }
-    for (let i = 0; i < circle.length; i++) {
-        circle[i].addEventListener("click", () => {
-            circle[i].classList.toggle("circle-clicked")
-            listItem[i].classList.toggle("todo-done")
-            if (!listItem[i].classList.contains("todo-done")) {
-                // console.log(savedDoneReminders)
-                remindersDoneFLS.splice(i, 1)
-                remindersDoneFLS = JSON.stringify(remindersDoneFLS)
-                if (remindersDoneFLS === '[]') {
-                    localStorage.removeItem("Completed List")
-                } else {
-                    localStorage.setItem("Completed List", remindersDoneFLS)
-                }
-                // console.log(doneListItem)
-            } else {
-                doneListItem.splice(i, 0, todoListItem[i])
-                let saveDoneReminders = JSON.stringify(doneListItem)
-                localStorage.setItem("Completed List", saveDoneReminders)
-                // console.log(doneListItem)
-            }
-        })
-    }
-}
-
-let remindersFLS = JSON.parse(reminderChild)
-if (remindersFLS) {
-    todoListItem = remindersFLS
-    renderAll()
-    setState()
-    emptyState.classList.remove("d-block")
-}
-
-for (let i = 0; i < listItem.length; i++) {
-    if (remindersDoneFLS && listItem[i].textContent === remindersDoneFLS[i]) {
-        circle[i].classList.add("circle-clicked")
-        listItem[i].classList.add("todo-done")
-        doneListItem = remindersDoneFLS
-    }
-    function actionWithClass(action1, action2) {
-        showCompleted.classList[action1]("d-none")
-        showAll.classList[action2]("d-none")
-    }
-    showCompleted.addEventListener("click", () => {
-        actionWithClass("add", "remove")
-        if (!listItem[i].classList.contains("todo-done")) {
-            reminderItem[i].classList.add("d-none")
-
-        }
-    })
-    showAll.addEventListener("click", () => {
-        actionWithClass("remove", "add")
-        if (reminderItem[i].classList.contains("d-none")) {
-            reminderItem[i].classList.remove("d-none")
-        }
-    })
-}
-
-if (!reminderChild) {
-    renderAll()
-}
 
 //Work on this part from
 for (let i = 0; i < newReminder.length; i++) {
@@ -152,15 +139,44 @@ reminderTitle.addEventListener("keyup", () => {
     setState()
 })
 
+//Adding Reminders
 for (let i = 0; i < addReminder.length; i++) {
     addReminder[i].addEventListener("click", () => {
-        todoListItem.push(reminderTitle.value)
-        reminderTitle.value = ""
-        let saveReminders = JSON.stringify(todoListItem)
-        localStorage.setItem("Reminders", saveReminders)
+        const objectItems = {
+            name: reminderTitle.value,
+            statusType: "unchecked"
+        }
+        taskItems.push(objectItems)
+        RenderFromLS()
         renderAll()
         setState()
+        reminderTitle.value = ""
         emptyState.classList.remove("d-block")
         newRContainer.classList.remove("slideup")
+    })
+}
+
+//Render Reminder Status Type
+for (let i = 0; i < listItem.length; i++) {
+    function actionWithClass(action1, action2) {
+        showCompleted.classList[action1]("d-none")
+        showAll.classList[action2]("d-none")
+    }
+    showCompleted.addEventListener("click", () => {
+        actionWithClass("add", "remove")
+        if (listItem[i].classList.contains("todo-done")) {
+            emptyState.classList.remove("d-block")
+        } else {
+            reminderItem[i].classList.add("d-none")
+            emptyState.classList.add("d-block")
+            emptyState.innerHTML = `<p>You have not completed any reminders.</p>`
+        }
+    })
+    showAll.addEventListener("click", () => {
+        actionWithClass("remove", "add")
+        if (reminderItem[i].classList.contains("d-none")) {
+            reminderItem[i].classList.remove("d-none")
+            emptyState.classList.remove("d-block")
+        }
     })
 }
