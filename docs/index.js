@@ -20,6 +20,7 @@ const editBtn = document.querySelector(".edit-btn")
 const doneBtn = document.querySelector(".done-btn")
 const deleteBtnItems = document.getElementsByClassName("delete-btn-items")
 const editBtnItems = document.getElementsByClassName("edit-btn-items")
+const deleteConfirmation = document.querySelector("delete-confirmation")
 
 let taskItems = []
 let parsedSavedLists = JSON.parse(savedLists)
@@ -48,6 +49,11 @@ function renderAll() {
     if (parsedSavedLists) {
         getStatusTypeFLS()
     }
+    if (taskItems.length === 0) {
+        editBtn.classList.add("d-none")
+    } else {
+        editBtn.classList.remove("d-none")
+    }
 }
 
 //Render from local storage
@@ -57,7 +63,7 @@ function RenderFromLS() {
 }
 
 
-if (parsedSavedLists) {
+if (parsedSavedLists.length > 0) {
     taskItems = parsedSavedLists
     renderAll()
     getStatusTypeFLS()
@@ -88,7 +94,7 @@ function itemAction() {
 //Get Status Type from Local Storage
 function getStatusTypeFLS() {
     for (let i = 0; i < circle.length; i++) {
-        if (parsedSavedLists[i].statusType === "checked") {
+        if (parsedSavedLists[i].statusType === "checked" && parsedSavedLists.lenght > 0) {
             circle[i].classList.add("circle-clicked")
             listItem[i].classList.add("todo-done")
         }
@@ -163,6 +169,10 @@ for (let i = 0; i < addReminder.length; i++) {
         reminderTitle.value = ""
         emptyState.classList.remove("d-block")
         newRContainer.classList.remove("slideup")
+        if (reminderList.className.includes("reminder-list-editable")) {
+            reminderList.classList.remove("reminder-list-editable")
+            doneBtn.classList.add("d-none")
+        }
     })
 }
 
@@ -219,23 +229,51 @@ function renderEditActions(elementName) {
                 }
             }
         }
+
+        eLforActionBtn()
+        deleteReminder()
     })
 }
 
 renderEditActions(editBtn)
 renderEditActions(doneBtn)
 
-for (let i = 0; i < reminderItem.length; i++) {
-    editItemBtn[i].addEventListener("click", () => {
-        editBtnItems[i].classList.toggle("d-none")
-        if (!deleteBtnItems[i].classList.contains("d-none")) {
-            deleteBtnItems[i].classList.toggle("d-none")
-        }
-    })
-    deleteBtn[i].addEventListener("click", () => {
-        deleteBtnItems[i].classList.toggle("d-none")
-        if (!editBtnItems[i].classList.contains("d-none")) {
+function eLforActionBtn() {
+    for (let i = 0; i < reminderItem.length; i++) {
+        editItemBtn[i].addEventListener("click", () => {
             editBtnItems[i].classList.toggle("d-none")
-        }
-    })
+            if (!deleteBtnItems[i].classList.contains("d-none")) {
+                deleteBtnItems[i].classList.toggle("d-none")
+            }
+        })
+        deleteBtn[i].addEventListener("click", () => {
+            deleteBtnItems[i].classList.toggle("d-none")
+            if (!editBtnItems[i].classList.contains("d-none")) {
+                editBtnItems[i].classList.toggle("d-none")
+            }
+        })
+    }
+}
+
+//Delete Reminder
+function deleteReminder() {
+    for (let i = 0; i < reminderItem.length; i++) {
+        deleteBtnItems[i].addEventListener("click", () => {
+            parsedSavedLists.splice(i, 1)
+            RenderFromLS()
+            renderAll()
+            if (reminderList.className.includes("reminder-list-editable")) {
+                editBtn.classList.add("d-none")
+                function stayEditable(arrayName, className, action) {
+                    for (const item of arrayName) {
+                        item.classList[action](className)
+                    }
+                }
+                stayEditable(reminderItem, "editable", "add")
+                stayEditable(editItemBtn, "d-none", "remove")
+                stayEditable(deleteBtn, "d-none", "remove")
+            }
+            // deleteConfirmation.
+        })
+    }
 }

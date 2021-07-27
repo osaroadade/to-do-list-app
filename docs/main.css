@@ -46,11 +46,10 @@ input[type = "text"]:focus-visible{
 	margin-top: 20px;
 }
 #reminder-list{
-    height: 365px;
+    max-height: 365px;
     overflow: auto;
 }
 .reminder-list-editable{
-    height: auto!important;
     background-color: #232323;
     border-radius: 4px;
 }
@@ -62,7 +61,7 @@ h1{
     display: flex;
     padding: 16px 0;
     gap: 10px;
-    /* transition: all ease-in 500ms */
+    align-items: flex-start
 }
 .editable{
     padding: 16px;
@@ -239,6 +238,7 @@ button:disabled{
 .action-btn{
     width: 70%;
     color: #fff;
+    padding: 16px;
 }
 .action-btn:hover{
     color: #fff;
@@ -256,4 +256,31 @@ button:disabled{
 }
 .edit-btn-items:hover{
     background: #0058bd;
+}
+.delete-confirmation{
+    padding: 12px;
+    text-align: center;
+    background-color: #282828;
+    position: absolute;
+    bottom: -43px;
+    border-radius: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 300px;
+    transition: all ease-in 500ms;
+}
+.delete-confirmation-animation{
+    animation: riseUp ease-in-out 300ms forwards;
+}
+@keyframes riseUp {
+    from {
+        bottom: -43px;
+    }
+    to {
+        bottom: 80px;
+        display: block!important;
+    }
+}
+.delete-confirmation p{
+    font-size: 14px;
 }
