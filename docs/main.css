@@ -22,9 +22,10 @@ body{
 	background: #1a1a1a;
 	color: #fff;
 	overflow: hidden;
+    height: 100vh;
 }
 .body-container {
-	margin: 24px;
+	padding: 24px;
     transition: all ease-in-out 200ms;
 }
 input[type = "text"]{
@@ -47,7 +48,11 @@ input[type = "text"]:focus-visible{
 #reminder-list{
     height: 365px;
     overflow: auto;
-    /* padding-bottom: 32px; */
+}
+.reminder-list-editable{
+    height: auto!important;
+    background-color: #232323;
+    border-radius: 4px;
 }
 h1{
 	color: #00a6ff;
@@ -55,12 +60,25 @@ h1{
 }
 .reminder-item{
     display: flex;
-    padding: 12px 0;
+    padding: 16px 0;
     gap: 10px;
+    /* transition: all ease-in 500ms */
 }
-.reminder-item > div {
+.editable{
+    padding: 16px;
+}
+.editable + .editable {
+    border-top: 1px solid #2b2b2b;
+}
+.reminder-item > div,
+.reminder-container button > img {
     height: 22px;
     width: 22px;
+}
+.reminder-item > button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .todo-done{
     color: rgb(189, 189, 189);
@@ -89,6 +107,9 @@ h1{
     top: 50%;
     transform: translate(-50%, -50%);
     left: 50%;
+}
+.list-item{
+    width: 100%;
 }
 .btn-container{
 	position: absolute;
@@ -214,4 +235,25 @@ button:disabled{
 }
 .transform-y{
     transform: translateY(-50px);
+}
+.action-btn{
+    width: 70%;
+    color: #fff;
+}
+.action-btn:hover{
+    color: #fff;
+}
+.delete-btn-items{
+    margin: -16px -16px -16px 0;
+    background-color: #ff3d64;
+}
+.delete-btn-items:hover{
+    background-color: #ff1242;
+}
+.edit-btn-items{
+    margin: -16px 0 -16px -16px;
+    background-color: #0078ff;
+}
+.edit-btn-items:hover{
+    background: #0058bd;
 }
