@@ -1,3 +1,4 @@
+"use strict"
 const circle = document.getElementsByClassName("circle")
 const listItem = document.getElementsByClassName("list-item")
 const reminderList = document.getElementById("reminder-list")
@@ -21,12 +22,26 @@ const doneBtn = document.querySelector(".done-btn")
 const deleteBtnItems = document.getElementsByClassName("delete-btn-items")
 const editBtnItems = document.getElementsByClassName("edit-btn-items")
 const deleteConfirmation = document.querySelector("delete-confirmation")
+const editContainer = document.querySelector(".edit-container")
+const cancelEdit = document.querySelector(".cancel-edit")
+const editReminder = document.querySelector("#edit-reminder")
+const updateReminder = document.querySelector(".update-reminder")
 
 let taskItems = []
 let parsedSavedLists = JSON.parse(savedLists)
 
-let containerItems = ""
+//Get Status Type from Local Storage
+function getStatusTypeFLS() {
+    for (let i = 0; i < circle.length; i++) {
+        if (parsedSavedLists[i].statusType === "checked" && parsedSavedLists.length > 0) {
+            circle[i].classList.add("circle-clicked")
+            listItem[i].classList.add("todo-done")
+        }
+    }
+}
+
 function renderAll() {
+    let containerItems = ""
     if (taskItems.length > 0) {
         for (let i = 0; i < taskItems.length; i++) {
             containerItems += `
@@ -41,12 +56,12 @@ function renderAll() {
             `
         }
         reminderList.innerHTML = containerItems
-        containerItems = ""
+        // containerItems = ""
     } else {
         emptyState.classList.toggle("d-block")
     }
     itemAction()
-    if (parsedSavedLists) {
+    if (parsedSavedLists.length > 0) {
         getStatusTypeFLS()
     }
     if (taskItems.length === 0) {
@@ -81,23 +96,13 @@ function itemAction() {
             listItem[i].classList[action]("todo-done")
         }
         circle[i].addEventListener("click", () => {
-            if (parsedSavedLists[i].statusType === "unchecked") {
+            if (parsedSavedLists[i].statusType === "unchecked" && parsedSavedLists.length > 0) {
                 changeStatusType("add", "checked")
             } else {
                 changeStatusType("remove", "unchecked")
             }
             RenderFromLS()
         })
-    }
-}
-
-//Get Status Type from Local Storage
-function getStatusTypeFLS() {
-    for (let i = 0; i < circle.length; i++) {
-        if (parsedSavedLists[i].statusType === "checked" && parsedSavedLists.lenght > 0) {
-            circle[i].classList.add("circle-clicked")
-            listItem[i].classList.add("todo-done")
-        }
     }
 }
 
@@ -144,7 +149,6 @@ for (let i = 0; i < newReminder.length; i++) {
 
 function setState() {
     for (let i = 0; i < addReminder.length; i++) {
-        addReminder[i].disabled = true
         if (reminderTitle.value != "") {
             addReminder[i].disabled = false
         }
@@ -232,12 +236,14 @@ function renderEditActions(elementName) {
 
         eLforActionBtn()
         deleteReminder()
+        editReminderItems()
     })
 }
 
 renderEditActions(editBtn)
 renderEditActions(doneBtn)
 
+// Edit list for action button
 function eLforActionBtn() {
     for (let i = 0; i < reminderItem.length; i++) {
         editItemBtn[i].addEventListener("click", () => {
@@ -255,25 +261,64 @@ function eLforActionBtn() {
     }
 }
 
+function renderEditedItems() {
+    RenderFromLS()
+    renderAll()
+    if (reminderList.className.includes("reminder-list-editable")) {
+        editBtn.classList.add("d-none")
+        function stayEditable(arrayName, className, action) {
+            for (const item of arrayName) {
+                item.classList[action](className)
+            }
+        }
+        stayEditable(reminderItem, "editable", "add")
+        stayEditable(editItemBtn, "d-none", "remove")
+        stayEditable(deleteBtn, "d-none", "remove")
+    }
+}
+
 //Delete Reminder
 function deleteReminder() {
     for (let i = 0; i < reminderItem.length; i++) {
         deleteBtnItems[i].addEventListener("click", () => {
             parsedSavedLists.splice(i, 1)
-            RenderFromLS()
-            renderAll()
-            if (reminderList.className.includes("reminder-list-editable")) {
-                editBtn.classList.add("d-none")
-                function stayEditable(arrayName, className, action) {
-                    for (const item of arrayName) {
-                        item.classList[action](className)
-                    }
-                }
-                stayEditable(reminderItem, "editable", "add")
-                stayEditable(editItemBtn, "d-none", "remove")
-                stayEditable(deleteBtn, "d-none", "remove")
-            }
+            renderEditedItems()
             // deleteConfirmation.
         })
     }
 }
+
+// Edit Reminder
+function editReminderItems() {
+    for (let i = 0; i < reminderItem.length; i++) {
+        editBtnItems[i].addEventListener("click", () => {
+            editContainer.classList.remove("d-none")
+            listItem[i].classList.add("editing")
+            editReminder.value = listItem[i].textContent
+        })
+
+        updateReminder.addEventListener("click", () => {
+            if (listItem[i].classList.contains("editing")) {
+                listItem[i].classList.remove("editing")
+                renderEditedItems()
+                editContainer.classList.remove("d-none")
+            }
+        })
+    }
+}
+
+function setEditInputState() {
+    updateReminder.disabled = true
+    if (editReminder.value != "") {
+        updateReminder.disabled = false
+    }
+}
+
+editReminder.addEventListener("keyup", () => {
+    setEditInputState()
+})
+
+cancelEdit.addEventListener("click", () => {
+    editContainer.classList.add("d-none")
+    editReminder.value = ""
+})

@@ -12,13 +12,13 @@
 
     <body>
         <div class="body-container">
-            <div class="title-container">
+            <div class="title-container d-none">
                 <div>
                     <button class="edit-btn">Edit</button>
                     <button class="done-btn d-none">Done</button>
                 </div>
                 <div>
-                    <button class="completed-btn">Show Completed</button>
+                    <button class="completed-btn" disabled>Show Completed</button>
                     <button class="show-all d-none">Show All</button>
                 </div>
             </div>
@@ -31,15 +31,15 @@
             </div>
             <div class="reminder-container">
                 <h1>Reminders</h1>
-                <div id="reminder-list"></div>
+                <div id="reminder-list" class="d-none"></div>
             </div>
             <div class="btn-container">
-                <button class="cancel-re here">
+                <button class="new-reminder">
                     <img src="./assets/add.svg">New Reminder
                 </button>
             </div>
         </div>
-        <div class="newR-container">
+        <div class="new-reminder-container d-none">
             <div class="title-area">
                 <div class="cancel">
                     <button class="cancel-re">Cancel</button>
@@ -60,7 +60,18 @@
         <div class="delete-confirmation d-none">
             <p>Name has been deleted successfully!</p>
         </div>
-        <script src="./index.js"></script>
+        <div class="edit-container d-none">
+            <div class="edit-reminder-item">
+                <h4>Edit Reminder</h4>
+                <input type="text" name="editReminder" id="edit-reminder" placeholder="Enter new name for reminder">
+                <div class="button-container">
+                    <button class="cancel-edit">Cancel</button>
+                    <button class="update-reminder" disabled>Update Reminder</button>
+                </div>
+            </div>
+        </div>
+        <!-- <script src="./index.js"></script> -->
+        <script src="./app.js"></script>
     </body>
 
 </html>
