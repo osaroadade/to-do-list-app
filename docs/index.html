@@ -1,77 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="shortcut icon" href="./assets/favicon.png" type="image/x-icon">
-        <title>Reminders App</title>
-        <link rel="stylesheet" href="./main.css">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./assets/favicon.png" type="image/x-icon">
+    <title>Reminders App</title>
+    <link rel="stylesheet" href="./main.css">
+</head>
 
-    <body>
-        <div class="body-container">
-            <div class="title-container d-none">
-                <div>
-                    <button class="edit-btn">Edit</button>
-                    <button class="done-btn d-none">Done</button>
-                </div>
-                <div>
-                    <button class="completed-btn" disabled>Show Completed</button>
-                    <button class="show-all d-none">Show All</button>
-                </div>
-            </div>
-            <div class="search-container">
-                <input type="text" name="search" id="sReminders" placeholder="Search" autocomplete="off">
-                <button class="cancel-search">Cancel</button>
-            </div>
-            <div id="empty-state">
-                <p>You have not created any reminders.</p>
-            </div>
-            <div class="reminder-container">
-                <h1>Reminders</h1>
-                <div id="reminder-list" class="d-none"></div>
-            </div>
-            <div class="btn-container">
-                <button class="new-reminder">
-                    <img src="./assets/add.svg">New Reminder
-                </button>
-            </div>
+<body>
+<div class="body-container">
+    <div class="title-container d-none">
+        <div>
+            <button class="edit-btn">Edit</button>
+            <button class="done-btn d-none">Done</button>
         </div>
-        <div class="new-reminder-container d-none">
-            <div class="title-area">
-                <div class="cancel">
-                    <button class="cancel-re">Cancel</button>
-                </div>
-                <h4>New Reminder</h4>
-                <div class="add">
-                    <button class="add-reminder" disabled>Add</button>
-                </div>
-            </div>
-            <div class="form-area">
-                <input type="text" name="title" id="reminder-title" placeholder="Reminder Title" autocomplete="none"
-                    aria-autocomplete="none">
-            </div>
-            <div class="btn-container">
-                <button class="add-reminder" disabled>Add Reminder</button>
-            </div>
+        <div>
+            <button class="completed-btn" disabled>Show Completed</button>
+            <button class="show-all d-none">Show All</button>
         </div>
-        <div class="delete-confirmation d-none">
-            <p>Name has been deleted successfully!</p>
+    </div>
+    <div class="search-container">
+        <label for="sReminders">
+            <input type="text" name="search" id="sReminders" placeholder="Search"
+                   autocomplete="off">
+        </label>
+        <button class="cancel-search d-none">Cancel</button>
+    </div>
+    <div id="empty-state">
+        <p>You have not created any reminders.</p>
+    </div>
+    <div class="reminder-container">
+        <h1>Reminders</h1>
+        <div id="reminder-list" class="d-none"></div>
+    </div>
+    <div class="btn-container">
+        <button class="new-reminder">
+            <img src="./assets/add.svg" alt="new-reminder">New Reminder
+        </button>
+    </div>
+</div>
+<div class="new-reminder-container d-none">
+    <div class="title-area">
+        <div class="cancel">
+            <button class="cancel-re">Cancel</button>
         </div>
-        <div class="edit-container d-none">
-            <div class="edit-reminder-item">
-                <h4>Edit Reminder</h4>
-                <input type="text" name="editReminder" id="edit-reminder" placeholder="Enter new name for reminder">
-                <div class="button-container">
-                    <button class="cancel-edit">Cancel</button>
-                    <button class="update-reminder" disabled>Update Reminder</button>
-                </div>
-            </div>
+        <h4>New Reminder</h4>
+        <div class="add">
+            <button class="add-reminder" disabled>Add</button>
         </div>
-        <!-- <script src="./index.js"></script> -->
-        <script src="./app.js"></script>
-    </body>
+    </div>
+    <div class="form-area">
+        <label for="reminder-title">
+            <input type="text" name="title" id="reminder-title" placeholder="Reminder Title" autocomplete="none"
+                   aria-autocomplete="none">
+        </label>
+    </div>
+    <div class="btn-container">
+        <button class="add-reminder" disabled>Add Reminder</button>
+    </div>
+</div>
+<div class="delete-confirmation d-none">
+    <p></p>
+</div>
+<div class="edit-container d-none">
+    <div class="edit-reminder-item">
+        <h4>Edit Reminder</h4>
+        <label for="edit-reminder">
+            <input type="text" name="editReminder" id="edit-reminder" placeholder="Enter new name for reminder">
+        </label>
+        <div class="button-container">
+            <button class="cancel-edit">Cancel</button>
+            <button class="update-reminder" disabled>Update Reminder</button>
+        </div>
+    </div>
+</div>
+<!-- <script src="./index.js"></script> -->
+<script src="./app.js"></script>
+</body>
 
 </html>

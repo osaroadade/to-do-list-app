@@ -32,19 +32,19 @@ let parsedSavedLists = JSON.parse(savedLists)
 
 //Get Status Type from Local Storage
 function getStatusTypeFLS() {
-    for (let i = 0; i < circle.length; i++) {
-        if (parsedSavedLists[i].statusType === "checked" && parsedSavedLists.length > 0) {
-            circle[i].classList.add("circle-clicked")
-            listItem[i].classList.add("todo-done")
-        }
-    }
+	for (let i = 0; i < circle.length; i++) {
+		if (parsedSavedLists[i].statusType === "checked" && parsedSavedLists.length > 0) {
+			circle[i].classList.add("circle-clicked")
+			listItem[i].classList.add("todo-done")
+		}
+	}
 }
 
 function renderAll() {
-    let containerItems = ""
-    if (taskItems.length > 0) {
-        for (let i = 0; i < taskItems.length; i++) {
-            containerItems += `
+	let containerItems = ""
+	if (taskItems.length > 0) {
+		for (let i = 0; i < taskItems.length; i++) {
+			containerItems += `
                 <div class="reminder-item">
                     <button class="action-btn edit-btn-items d-none">Edit</button>
                     <button class="delete-btn d-none"><img src="./assets/delete.svg"></button>
@@ -54,190 +54,193 @@ function renderAll() {
                     <button class="action-btn delete-btn-items d-none">Delete</button>
                 </div>
             `
-        }
-        reminderList.innerHTML = containerItems
-        // containerItems = ""
-    } else {
-        emptyState.classList.toggle("d-block")
-    }
-    itemAction()
-    if (parsedSavedLists.length > 0) {
-        getStatusTypeFLS()
-    }
-    if (taskItems.length === 0) {
-        editBtn.classList.add("d-none")
-    } else {
-        editBtn.classList.remove("d-none")
-    }
+		}
+		reminderList.innerHTML = containerItems
+		// containerItems = ""
+	} else {
+		emptyState.classList.toggle("d-block")
+	}
+	itemAction()
+	if (parsedSavedLists.length > 0) {
+		getStatusTypeFLS()
+	}
+	if (taskItems.length === 0) {
+		editBtn.classList.add("d-none")
+	} else {
+		editBtn.classList.remove("d-none")
+	}
 }
 
 //Render from local storage
 function RenderFromLS() {
-    let stringItems = JSON.stringify(taskItems)
-    localStorage.setItem("tasks", stringItems)
+	let stringItems = JSON.stringify(taskItems)
+	localStorage.setItem("tasks", stringItems)
 }
 
 
 if (parsedSavedLists.length > 0) {
-    taskItems = parsedSavedLists
-    renderAll()
-    getStatusTypeFLS()
-    setState()
-    emptyState.classList.remove("d-block")
+	taskItems = parsedSavedLists
+	renderAll()
+	getStatusTypeFLS()
+	setState()
+	emptyState.classList.remove("d-block")
 } else {
-    renderAll()
+	renderAll()
 }
 
 function itemAction() {
-    for (let i = 0; i < circle.length; i++) {
-        function changeStatusType(action, toggleStatusType) {
-            parsedSavedLists[i].statusType = toggleStatusType
-            circle[i].classList[action]("circle-clicked")
-            listItem[i].classList[action]("todo-done")
-        }
-        circle[i].addEventListener("click", () => {
-            if (parsedSavedLists[i].statusType === "unchecked" && parsedSavedLists.length > 0) {
-                changeStatusType("add", "checked")
-            } else {
-                changeStatusType("remove", "unchecked")
-            }
-            RenderFromLS()
-        })
-    }
+	for (let i = 0; i < circle.length; i++) {
+		function changeStatusType(action, toggleStatusType) {
+			parsedSavedLists[i].statusType = toggleStatusType
+			circle[i].classList[action]("circle-clicked")
+			listItem[i].classList[action]("todo-done")
+		}
+
+		circle[i].addEventListener("click", () => {
+			if (parsedSavedLists[i].statusType === "unchecked" && parsedSavedLists.length > 0) {
+				changeStatusType("add", "checked")
+			} else {
+				changeStatusType("remove", "unchecked")
+			}
+			RenderFromLS()
+		})
+	}
 }
 
 // Search
 sReminders.addEventListener("keyup", () => {
-    const sRemindersLC = sReminders.value.toLowerCase()
-    for (let i = 0; i < taskItems.length; i++) {
-        let listItemLC = taskItems[i].name.toLowerCase()
-        if (listItemLC.includes(sRemindersLC)) {
-            reminderItem[i].style.display = "flex"
-        } else {
-            reminderItem[i].style.display = "none"
-        }
-    }
+	const sRemindersLC = sReminders.value.toLowerCase()
+	for (let i = 0; i < taskItems.length; i++) {
+		let listItemLC = taskItems[i].name.toLowerCase()
+		if (listItemLC.includes(sRemindersLC)) {
+			reminderItem[i].style.display = "flex"
+		} else {
+			reminderItem[i].style.display = "none"
+		}
+	}
 })
 
 function searchMotion(action) {
-    searchContainer.classList[action]("search-container-grow")
-    cancelSearch.classList[action]("d-block")
-    titleContianer.classList[action]("transform-y")
+	searchContainer.classList[action]("search-container-grow")
+	cancelSearch.classList[action]("d-block")
+	titleContianer.classList[action]("transform-y")
 }
 
 sReminders.addEventListener("click", () => {
-    searchMotion("add")
+	searchMotion("add")
 })
 
 cancelSearch.addEventListener("click", () => {
-    searchMotion("remove")
+	searchMotion("remove")
 })
 
 //Work on this part from
 for (let i = 0; i < newReminder.length; i++) {
-    if (newReminder[i].className.includes("here")) {
-        newReminder[i].addEventListener("click", () => {
-            newRContainer.classList.add("slideup", "d-block")
-        })
-    } else {
-        newReminder[i].addEventListener("click", () => {
-            newRContainer.classList.remove("slideup", "d-block")
-        })
-    }
+	if (newReminder[i].className.includes("here")) {
+		newReminder[i].addEventListener("click", () => {
+			newRContainer.classList.add("slideup", "d-block")
+		})
+	} else {
+		newReminder[i].addEventListener("click", () => {
+			newRContainer.classList.remove("slideup", "d-block")
+		})
+	}
 }
+
 // to here
 
 function setState() {
-    for (let i = 0; i < addReminder.length; i++) {
-        if (reminderTitle.value != "") {
-            addReminder[i].disabled = false
-        }
-    }
+	for (let i = 0; i < addReminder.length; i++) {
+		if (reminderTitle.value != "") {
+			addReminder[i].disabled = false
+		}
+	}
 }
 
 reminderTitle.addEventListener("keyup", () => {
-    setState()
+	setState()
 })
 
 //Adding Reminders
 for (let i = 0; i < addReminder.length; i++) {
-    addReminder[i].addEventListener("click", () => {
-        const objectItems = {
-            name: reminderTitle.value,
-            statusType: "unchecked"
-        }
-        taskItems.push(objectItems)
-        RenderFromLS()
-        renderAll()
-        setState()
-        reminderTitle.value = ""
-        emptyState.classList.remove("d-block")
-        newRContainer.classList.remove("slideup")
-        if (reminderList.className.includes("reminder-list-editable")) {
-            reminderList.classList.remove("reminder-list-editable")
-            doneBtn.classList.add("d-none")
-        }
-    })
+	addReminder[i].addEventListener("click", () => {
+		const objectItems = {
+			name: reminderTitle.value,
+			statusType: "unchecked"
+		}
+		taskItems.push(objectItems)
+		RenderFromLS()
+		renderAll()
+		setState()
+		reminderTitle.value = ""
+		emptyState.classList.remove("d-block")
+		newRContainer.classList.remove("slideup")
+		if (reminderList.className.includes("reminder-list-editable")) {
+			reminderList.classList.remove("reminder-list-editable")
+			doneBtn.classList.add("d-none")
+		}
+	})
 }
 
 //Toggle buttons on click in title continers
 function actionWithClass(name1, name2) {
-    name1.classList.toggle("d-none")
-    name2.classList.toggle("d-none")
+	name1.classList.toggle("d-none")
+	name2.classList.toggle("d-none")
 }
 
 //Render Reminder Status Type (Show all and show completed)
 for (let i = 0; i < listItem.length; i++) {
-    showCompleted.addEventListener("click", () => {
-        actionWithClass(showCompleted, showAll)
-        if (listItem[i].classList.contains("todo-done")) {
-            emptyState.classList.remove("d-block")
-        } else {
-            reminderItem[i].classList.add("d-none")
-            emptyState.classList.add("d-block")
-            emptyState.innerHTML = `<p>You have not completed any reminders.</p>`
-        }
-    })
-    showAll.addEventListener("click", () => {
-        actionWithClass(showCompleted, showAll)
-        if (reminderItem[i].classList.contains("d-none")) {
-            reminderItem[i].classList.remove("d-none")
-            emptyState.classList.remove("d-block")
-        }
-    })
+	showCompleted.addEventListener("click", () => {
+		actionWithClass(showCompleted, showAll)
+		if (listItem[i].classList.contains("todo-done")) {
+			emptyState.classList.remove("d-block")
+		} else {
+			reminderItem[i].classList.add("d-none")
+			emptyState.classList.add("d-block")
+			emptyState.innerHTML = `<p>You have not completed any reminders.</p>`
+		}
+	})
+	showAll.addEventListener("click", () => {
+		actionWithClass(showCompleted, showAll)
+		if (reminderItem[i].classList.contains("d-none")) {
+			reminderItem[i].classList.remove("d-none")
+			emptyState.classList.remove("d-block")
+		}
+	})
 }
 
 // Render Edit Actions for reminder items
 function renderEditActions(elementName) {
-    function toggleEditActions(action, className) {
-        for (const i of action) {
-            i.classList.toggle(className)
-        }
-    }
-    elementName.addEventListener("click", () => {
-        actionWithClass(editBtn, doneBtn)
-        toggleEditActions(deleteBtn, "d-none")
-        toggleEditActions(editItemBtn, "d-none")
-        toggleEditActions(reminderItem, "editable")
-        reminderList.classList.toggle("reminder-list-editable")
+	function toggleEditActions(action, className) {
+		for (const i of action) {
+			i.classList.toggle(className)
+		}
+	}
 
-        if (elementName === doneBtn) {
-            for (const i of editBtnItems) {
-                if (!i.classList.contains("d-none")) {
-                    i.classList.toggle("d-none")
-                }
-            }
-            for (const i of deleteBtnItems) {
-                if (!i.classList.contains("d-none")) {
-                    i.classList.toggle("d-none")
-                }
-            }
-        }
+	elementName.addEventListener("click", () => {
+		actionWithClass(editBtn, doneBtn)
+		toggleEditActions(deleteBtn, "d-none")
+		toggleEditActions(editItemBtn, "d-none")
+		toggleEditActions(reminderItem, "editable")
+		reminderList.classList.toggle("reminder-list-editable")
 
-        eLforActionBtn()
-        deleteReminder()
-        editReminderItems()
-    })
+		if (elementName === doneBtn) {
+			for (const i of editBtnItems) {
+				if (!i.classList.contains("d-none")) {
+					i.classList.toggle("d-none")
+				}
+			}
+			for (const i of deleteBtnItems) {
+				if (!i.classList.contains("d-none")) {
+					i.classList.toggle("d-none")
+				}
+			}
+		}
+
+		eLforActionBtn()
+		deleteReminder()
+		editReminderItems()
+	})
 }
 
 renderEditActions(editBtn)
@@ -245,80 +248,82 @@ renderEditActions(doneBtn)
 
 // Edit list for action button
 function eLforActionBtn() {
-    for (let i = 0; i < reminderItem.length; i++) {
-        editItemBtn[i].addEventListener("click", () => {
-            editBtnItems[i].classList.toggle("d-none")
-            if (!deleteBtnItems[i].classList.contains("d-none")) {
-                deleteBtnItems[i].classList.toggle("d-none")
-            }
-        })
-        deleteBtn[i].addEventListener("click", () => {
-            deleteBtnItems[i].classList.toggle("d-none")
-            if (!editBtnItems[i].classList.contains("d-none")) {
-                editBtnItems[i].classList.toggle("d-none")
-            }
-        })
-    }
+	for (let i = 0; i < reminderItem.length; i++) {
+		editItemBtn[i].addEventListener("click", () => {
+			editBtnItems[i].classList.toggle("d-none")
+			if (!deleteBtnItems[i].classList.contains("d-none")) {
+				deleteBtnItems[i].classList.toggle("d-none")
+			}
+		})
+		deleteBtn[i].addEventListener("click", () => {
+			deleteBtnItems[i].classList.toggle("d-none")
+			if (!editBtnItems[i].classList.contains("d-none")) {
+				editBtnItems[i].classList.toggle("d-none")
+			}
+		})
+	}
 }
 
 function renderEditedItems() {
-    RenderFromLS()
-    renderAll()
-    if (reminderList.className.includes("reminder-list-editable")) {
-        editBtn.classList.add("d-none")
-        function stayEditable(arrayName, className, action) {
-            for (const item of arrayName) {
-                item.classList[action](className)
-            }
-        }
-        stayEditable(reminderItem, "editable", "add")
-        stayEditable(editItemBtn, "d-none", "remove")
-        stayEditable(deleteBtn, "d-none", "remove")
-    }
+	RenderFromLS()
+	renderAll()
+	if (reminderList.className.includes("reminder-list-editable")) {
+		editBtn.classList.add("d-none")
+
+		function stayEditable(arrayName, className, action) {
+			for (const item of arrayName) {
+				item.classList[action](className)
+			}
+		}
+
+		stayEditable(reminderItem, "editable", "add")
+		stayEditable(editItemBtn, "d-none", "remove")
+		stayEditable(deleteBtn, "d-none", "remove")
+	}
 }
 
 //Delete Reminder
 function deleteReminder() {
-    for (let i = 0; i < reminderItem.length; i++) {
-        deleteBtnItems[i].addEventListener("click", () => {
-            parsedSavedLists.splice(i, 1)
-            renderEditedItems()
-            // deleteConfirmation.
-        })
-    }
+	for (let i = 0; i < reminderItem.length; i++) {
+		deleteBtnItems[i].addEventListener("click", () => {
+			parsedSavedLists.splice(i, 1)
+			renderEditedItems()
+			// deleteConfirmation.
+		})
+	}
 }
 
 // Edit Reminder
 function editReminderItems() {
-    for (let i = 0; i < reminderItem.length; i++) {
-        editBtnItems[i].addEventListener("click", () => {
-            editContainer.classList.remove("d-none")
-            listItem[i].classList.add("editing")
-            editReminder.value = listItem[i].textContent
-        })
+	for (let i = 0; i < reminderItem.length; i++) {
+		editBtnItems[i].addEventListener("click", () => {
+			editContainer.classList.remove("d-none")
+			listItem[i].classList.add("editing")
+			editReminder.value = listItem[i].textContent
+		})
 
-        updateReminder.addEventListener("click", () => {
-            if (listItem[i].classList.contains("editing")) {
-                listItem[i].classList.remove("editing")
-                renderEditedItems()
-                editContainer.classList.remove("d-none")
-            }
-        })
-    }
+		updateReminder.addEventListener("click", () => {
+			if (listItem[i].classList.contains("editing")) {
+				listItem[i].classList.remove("editing")
+				renderEditedItems()
+				editContainer.classList.remove("d-none")
+			}
+		})
+	}
 }
 
 function setEditInputState() {
-    updateReminder.disabled = true
-    if (editReminder.value != "") {
-        updateReminder.disabled = false
-    }
+	updateReminder.disabled = true
+	if (editReminder.value != "") {
+		updateReminder.disabled = false
+	}
 }
 
 editReminder.addEventListener("keyup", () => {
-    setEditInputState()
+	setEditInputState()
 })
 
 cancelEdit.addEventListener("click", () => {
-    editContainer.classList.add("d-none")
-    editReminder.value = ""
+	editContainer.classList.add("d-none")
+	editReminder.value = ""
 })
