@@ -1,2 +1,3 @@
 # Ignoring all that needs be ignored.
 .vscode/*
+docs/index.html
